@@ -1,0 +1,45 @@
+library(dplyr)
+db <- read.csv("C:\\Users\\Gautam Priyanka\\Downloads\\world-happiness-data.csv")
+View(db)
+db<- db[,-5]
+distinct(db,Region)
+db$Continent <- NA
+
+db$Continent[which(db$Region %in% c("Australia and New Zealand"))] <- "Australia"
+db$Continent[which(db$Region %in% c("Western Europe", "Central and Eastern Europe"))] <- "Europe"
+db$Continent[which(db$Region %in% c("North America"))] <- "North America"
+db$Continent[which(db$Region %in% c("Latin America and Caribbean"))] <- "South America"
+db$Continent[which(db$Region %in% c("Middle East and Northern Africa", "Sub-Saharan Africa"))] <- "Africa"
+db$Continent[which(db$Region %in% c("Southeastern Asia","Eastern Asia", "Southern Asia"))] <- "Asia"
+
+names(db)
+
+hp<- aggregate(db[,4:11], list(db$Continent), mean)
+View(hp)
+
+library(ggplot2)
+library(corrgram)
+library(corrplot)
+
+
+ggplot(hp, aes(x= Group.1, y= Happiness.Score, fill= Group.1)) + geom_bar(stat= "Identity") + ggtitle("Happiness Score of each Continent") + ylab("Happiness Score") +xlab("Continent")
+
+col <- sapply(db, is.numeric)
+cor.data <- cor(db[,col])
+corrplot(cor.data, method = "square", type = "upper")
+corrplot(cor.data, method = "number", type = "upper")
+
+
+
+
+
+
+
+
+
+box<-ggplot(db,aes(x=Region, y= Hapiness.Score, colours=Region))
+
+
+
+
+
